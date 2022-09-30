@@ -1,9 +1,7 @@
 package com.crud.project.api;
 
 
-import com.crud.project.dto.ProjectRequest;
 import com.crud.project.entity.Project;
-import com.crud.project.repository.ProjectRepository;
 import com.crud.project.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/project")
+@CrossOrigin(origins = "*")
 
 public class ProjectController {
 
@@ -22,22 +21,34 @@ public class ProjectController {
     public ProjectController(ProjectService projectService){
         this.projectService = projectService;
     }
-    /*@GetMapping("")
+    @GetMapping("")
 
-    public List<Project> index(){
-        return projectRepository.findAll();
+    public ResponseEntity<List<Project>> index(){
+        return ResponseEntity.ok().body(projectService.findAll());
     }
 
     @GetMapping("/{id}")
 
-    public Project getById(@PathVariable Long id){
-        return projectRepository.findById(id).get();
+    public ResponseEntity<Project> getById(@PathVariable Long id){
+        return ResponseEntity.ok().body(projectService.findById(id));
     }
-*/
+
+    @DeleteMapping("/{id}")
+
+    public ResponseEntity<Long> deleteById(@PathVariable Long id){
+        return ResponseEntity.ok().body(projectService.delete(id));
+    }
+
     @PostMapping("")
 
-    public ResponseEntity<?> create(@RequestBody ProjectRequest projectRequest) {
-        return ResponseEntity.ok().body(projectService.create(projectRequest));
+    public ResponseEntity<?> create(@RequestBody Project project) {
+        return ResponseEntity.ok().body(projectService.create(project));
+    }
+
+    @PutMapping ("")
+
+    public ResponseEntity<Project> update(@RequestBody Project project) {
+        return ResponseEntity.ok().body(projectService.update(project));
     }
 
 }
